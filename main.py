@@ -37,11 +37,6 @@ class MyClient(discord.Client):
                 fileOperations.setFlag(0)
 
 client = MyClient()
-#client.run(os.environ["BOT-TOKEN"])
-main = threading.Thread(target=client.run, args=(os.environ["BOT-TOKEN"],))
+client.run(os.environ["BOT-TOKEN"])
 print(threading.current_thread())
-
-
-main.start()
-#timer.start()
 
