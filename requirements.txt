@@ -1,0 +1,7 @@
+discord
+os
+time
+threading
+datetime
+json
+requests
