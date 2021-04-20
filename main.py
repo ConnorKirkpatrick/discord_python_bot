@@ -29,7 +29,7 @@ class MyClient(discord.Client):
                 fileOperations.setServer(message.content[14:])
             elif message.content.__contains__("kirk-startMonitor"):
                 await message.reply("Setting up.......")
-                #fileOperations.setFlag(1)
+                fileOperations.setFlag(1)
                 time.sleep(2.5)
                 await monitorTimer.monitorTimer(client)
             elif message.content.__contains__("kirk-stopMonitor"):
