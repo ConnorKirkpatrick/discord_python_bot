@@ -12,6 +12,7 @@ async def getDetails(client):
     for server in servers['SERVERS']:
         if server['NAME'] == requestServer:
             message = "SERVER: " + server['NAME'] + "\nIP: "+ server['IP_ADDRESS']+ "\nPORT: "+ server['PORT']+ "\nMISSION: "+ server['MISSION_NAME']+ "\nPLAYERS: "+ server['PLAYERS']+ "\nTIME UP: "+ server['MISSION_TIME_FORMATTED']+ "\nLAST CHECKED: "+ str(datetime.datetime.now()).split(".")[0]
+            print(message)
             await channel.last_message.delete()
             if channel:
                 await channel.send(message)
@@ -20,5 +21,6 @@ async def getDetails(client):
         await channel.last_message.delete()
         if channel:
             await channel.send("Server unreachable:"+requestServer+"\nCheck the server name, else it is down.\nLAST CHECKED:"+str(datetime.datetime.now()).split(".")[0])
+            print("unreachable")
     except Exception as e:
         print(e)
