@@ -36,6 +36,9 @@ class MyClient(discord.Client):
                 await message.reply("stopping.....")
                 fileOperations.setFlag(0)
 
+            elif message.content.__contains__("kirk-status"):
+                await message.reply("Server: "+fileOperations.getServer()+"\nChannel: "+fileOperations.getChannel()+"\nFlag: "+fileOperations.getFlag())
+
 client = MyClient()
 client.run(os.environ["BOT-TOKEN"])
 print(threading.current_thread())
