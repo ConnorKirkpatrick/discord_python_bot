@@ -1,0 +1,1 @@
+channel:833808612949229613,ServerName:testgibberish,monitorFlag:1,
