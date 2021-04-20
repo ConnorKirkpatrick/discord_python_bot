@@ -1,7 +1,7 @@
-discord
-os
-time
-threading
-datetime
-json
-requests
+discord^1
+os^3.9
+time^1
+threading^1
+datetime^1
+json^1
+requests^1
