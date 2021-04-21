@@ -2,12 +2,11 @@ import fileOperations
 import monitorLoop
 import time
 import threading
+import asyncio
 
 
 async def monitorTimer(client, guild,message):
-    while True:
-        if fileOperations.getFlag(str(guild)) == "1":
-            await monitorLoop.getDetails(client, str(guild),message)
-        else:
-            break
-        time.sleep(7.5)
+    if fileOperations.getFlag(str(guild)) == "1":
+        await monitorLoop.getDetails(client, str(guild),message)
+        await asyncio.sleep(10)
+        await monitorTimer(client, guild,message)

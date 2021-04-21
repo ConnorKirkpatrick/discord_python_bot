@@ -1,11 +1,12 @@
-import discord
+import asyncio
 import os
-import time
-import threading
+
+import discord
 
 import fileOperations
 import monitorTimer
 
+# TODO: Crash upon setup if no file is present -> should fault and tell the user to set up
 
 class MyClient(discord.Client):
 
@@ -34,9 +35,13 @@ class MyClient(discord.Client):
                 fileOperations.setServer(message.content[14:], message.guild)
             elif message.content.__contains__("kirk-startMonitor"):
                 await message.reply("Setting up.......")
+                # add a check to see if the monitor is running first
                 fileOperations.setFlag(1, message.guild)
-                time.sleep(2.5)
-                await monitorTimer.monitorTimer(client, message.guild, message)
+                await asyncio.sleep(2.5)
+                try:
+                    asyncio.run(await monitorTimer.monitorTimer(client, message.guild, message))
+                except Exception as e:
+                    print(e)
             elif message.content.__contains__("kirk-stopMonitor"):
                 await message.reply("stopping.....")
                 fileOperations.setFlag(0, message.guild)
@@ -48,11 +53,8 @@ class MyClient(discord.Client):
 
 client = MyClient()
 client.run(os.environ["BOT-TOKEN"])
-print(threading.current_thread())
 
-
-#idea, updater threat always running on 30 sec intervals
-#checks global array for server names to monitor and guild names
-#pushes the details to the guild files
-#guild files wait for that write event, when triggered they read and output
-#thus, run updater on one thread, each
+def startupRecovery():
+    print("TESTING")
+    # check all files inside of guildSettings
+    # if file flag is true, start a monitor for it
