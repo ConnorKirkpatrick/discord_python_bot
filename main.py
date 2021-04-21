@@ -23,7 +23,9 @@ class MyClient(discord.Client):
                                     "setChannel: set the channel the monitor will post in\n"
                                     "setServer: give the full name of the server you wish to monitor\n"
                                     "startMonitor: Start the monitor\n"
-                                    "stopMonitor: stop the monitor\nhelp:Display this message")
+                                    "stopMonitor: stop the monitor\n"
+                                    "status: displays the current set values for server, channel and flag\n"
+                                    "help:Display this message")
             elif message.content.__contains__("kirk-setChannel"):
                 await message.reply("setting chan")
                 fileOperations.setChannel(message.content[15:], message.guild)
