@@ -34,7 +34,7 @@ class MyClient(discord.Client):
                 await message.reply("Setting up.......")
                 fileOperations.setFlag(1, message.guild)
                 time.sleep(2.5)
-                await monitorTimer.monitorTimer(client, message.guild)
+                await monitorTimer.monitorTimer(client, message.guild, message)
             elif message.content.__contains__("kirk-stopMonitor"):
                 await message.reply("stopping.....")
                 fileOperations.setFlag(0, message.guild)
@@ -53,3 +53,4 @@ print(threading.current_thread())
 #checks global array for server names to monitor and guild names
 #pushes the details to the guild files
 #guild files wait for that write event, when triggered they read and output
+#thus, run updater on one thread, each

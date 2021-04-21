@@ -77,7 +77,7 @@ def setServer(Server, guild):
         setup.start()
         setup.join()
     finally:
-        values = open(guild+".txt", "r")
+        values = open("guildSettings/"+guild+".txt", "r")
         content = values.readlines()
         values.close()
         content = content[0].split(",")

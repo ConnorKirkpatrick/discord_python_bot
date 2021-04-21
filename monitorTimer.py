@@ -4,10 +4,10 @@ import time
 import threading
 
 
-async def monitorTimer(client):
+async def monitorTimer(client, guild,message):
     while True:
-        if fileOperations.getFlag() == "1":
-            await monitorLoop.getDetails(client)
+        if fileOperations.getFlag(str(guild)) == "1":
+            await monitorLoop.getDetails(client, str(guild),message)
         else:
             break
-        time.sleep(45)
+        time.sleep(7.5)
