@@ -29,15 +29,18 @@ async def getDetails(client,guild,message):
             message = "SERVER: " + server['NAME'] + "\nIP: "+ server['IP_ADDRESS']+ "\nPORT: "+ server['PORT']+ "\nMISSION: "+ server['MISSION_NAME']+ "\nPLAYERS: "+ server['PLAYERS']+ "\nTIME UP: "+ server['MISSION_TIME_FORMATTED']+ "\nLAST CHECKED: "+ str(datetime.datetime.now()).split(".")[0]
             #print(message)
             flag = 1
-            await channel.last_message.delete()
-            if channel:
+            try:
+                await channel.last_message.delete()
+            except Exception as e:
+                print(e)
+            finally:
                 await channel.send(message)
                 break
     if flag == 0:
         try:
             await channel.last_message.delete()
-            if channel:
-                await channel.send("Server unreachable:"+requestServer+"\nCheck the server name, else it is down.\nLAST CHECKED:"+str(datetime.datetime.now()).split(".")[0])
-               # print("unreachable")
         except Exception as e:
             print(e)
+        finally:
+            await channel.send("Server unreachable:"+requestServer+"\nCheck the server name, else it is down.\nLAST CHECKED:"+str(datetime.datetime.now()).split(".")[0])
+            # print("unreachable")
