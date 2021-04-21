@@ -26,6 +26,7 @@ class MyClient(discord.Client):
                                     "stopMonitor: stop the monitor\n"
                                     "status: displays the current set values for server, channel and flag\n"
                                     "help:Display this message")
+                print(client.get_channel('833808612949229613'))
             elif message.content.__contains__("kirk-setChannel"):
                 await message.reply("setting chan")
                 fileOperations.setChannel(message.content[15:], message.guild)
@@ -36,7 +37,8 @@ class MyClient(discord.Client):
                 await message.reply("Setting up.......")
                 fileOperations.setFlag(1, message.guild)
                 time.sleep(2.5)
-                await monitorTimer.monitorTimer(client, message.guild, message)
+                threading.Timer(30, await monitorTimer.monitorTimer(client, message.guild, message))
+                #await monitorTimer.monitorTimer(client, message.guild, message)
             elif message.content.__contains__("kirk-stopMonitor"):
                 await message.reply("stopping.....")
                 fileOperations.setFlag(0, message.guild)
@@ -48,7 +50,13 @@ class MyClient(discord.Client):
 
 client = MyClient()
 client.run(os.environ["BOT-TOKEN"])
+
+
+
 print(threading.current_thread())
+
+
+
 
 
 #idea, updater threat always running on 30 sec intervals
