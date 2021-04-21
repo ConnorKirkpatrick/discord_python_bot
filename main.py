@@ -6,8 +6,6 @@ import discord
 import fileOperations
 import monitorTimer
 
-# TODO: Crash upon setup if no file is present -> should fault and tell the user to set up
-
 class MyClient(discord.Client):
 
     async def on_ready(self):
@@ -20,18 +18,18 @@ class MyClient(discord.Client):
             return
         else:
             if message.content.__contains__("kirk-help"):
-                await message.reply("Use Commands wit hthe prefix 'kirk-':\n"
+                await message.reply("Use Commands wit the prefix 'kirk-':\n"
                                     "setChannel: set the channel the monitor will post in\n"
                                     "setServer: give the full name of the server you wish to monitor\n"
                                     "startMonitor: Start the monitor\n"
                                     "stopMonitor: stop the monitor\n"
                                     "status: displays the current set values for server, channel and flag\n"
-                                    "help:Display this message")
+                                    "help: Display this message")
             elif message.content.__contains__("kirk-setChannel"):
-                await message.reply("setting chan")
+                await message.reply("setting channel to: "+message.content[15:])
                 fileOperations.setChannel(message.content[15:], message.guild)
             elif message.content.__contains__("kirk-setServer"):
-                await message.reply("setting ser")
+                await message.reply("setting server to: "+message.content[14:])
                 fileOperations.setServer(message.content[14:], message.guild)
             elif message.content.__contains__("kirk-startMonitor"):
                 await message.reply("Setting up.......")
@@ -47,7 +45,7 @@ class MyClient(discord.Client):
                 fileOperations.setFlag(0, message.guild)
             elif message.content.__contains__("kirk-status"):
                 await message.reply("Server: " + fileOperations.getServer(message.guild) + "\nChannel: " +
-                                    fileOperations.getChannel(message.guild) + "\nFlag: " +
+                                    fileOperations.getChannel(message.guild) + "\nMonitor (1 is yes): " +
                                     fileOperations.getFlag(message.guild))
 
 

@@ -12,7 +12,6 @@ async def getDetails(client, guild, message):
         print("Bad config: bad names")
         await message.reply("Check your configuration")
         fileOperations.setFlag(0, guild)
-        print(threading.current_thread())
         return 0
     try:
         channel = int(channel)
