@@ -1,1 +1,1 @@
-channel:833808612949229613,ServerName:testgibberish,monitorFlag:0,
+channel:,ServerName:,monitorFlag:0,guild:

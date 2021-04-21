@@ -35,7 +35,6 @@ class MyClient(discord.Client):
             elif message.content.__contains__("kirk-stopMonitor"):
                 await message.reply("stopping.....")
                 fileOperations.setFlag(0)
-
             elif message.content.__contains__("kirk-status"):
                 await message.reply("Server: "+fileOperations.getServer()+"\nChannel: "+fileOperations.getChannel()+"\nFlag: "+fileOperations.getFlag())
 

@@ -55,3 +55,20 @@ def setFlag(flag):
     f = open("values.txt", "w")
     f.write(new)
     f.close()
+
+def getGuild():
+    values = open("values.txt", "r")
+    content = values.readlines()
+    values.close()
+    guild = content[0].split(",")[3].split(":")[1]
+    return guild
+
+def setGuild(guild):
+    values = open("values.txt", "r")
+    content = values.readlines()
+    values.close()
+    content = content[0].split(",")
+    new = content[0] + ","+content[1]+",monitorFlag:" + content[2] + ",guild:" + guild
+    f = open("values.txt", "w")
+    f.write(new)
+    f.close()
