@@ -1,1 +1,1 @@
-channel:,ServerName:,monitorFlag:0,guild:
+channel:,ServerName:cold war,monitorFlag:0,
