@@ -10,17 +10,25 @@ async def getDetails(client, guild, message):
     channel = fileOperations.getChannel(guild)
     if channel is None or requestServer is None:
         print("Bad config: bad names")
-        await message.reply("Check your configuration")
-        fileOperations.setFlag(0, guild)
-        return 0
+        try:
+            await message.reply("Check your configuration")
+        except Exception as e:
+            print(e)
+        finally:
+            fileOperations.setFlag(0, guild)
+            return 0
     try:
         channel = int(channel)
     except Exception as e:
         print(e)
         print("Bad config: bad channel format")
-        await message.reply("Check your configuration")
-        fileOperations.setFlag(0, guild)
-        return 0
+        try:
+            await message.reply("Check your configuration")
+        except Exception as e:
+            print(e)
+        finally:
+            fileOperations.setFlag(0, guild)
+            return 0
     channel = client.get_channel(channel)
     flag = 0
     # print(servers['SERVERS'])
