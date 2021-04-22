@@ -17,6 +17,7 @@ async def startupRecovery():
         file = file[:-4]
         flag = data[0].split(",")[2].split(":")[1]
         if flag == '1':
+            print("Starting: "+file)
             await monitorTimer.monitorTimer(client, file, None)
 
 
@@ -64,6 +65,7 @@ class MyClient(discord.Client):
                 await message.reply("Server: " + fileOperations.getServer(message.guild) + "\nChannel: " +
                                     fileOperations.getChannel(message.guild) + "\nMonitor (1 is yes): " +
                                     fileOperations.getFlag(message.guild))
+            
 
 
 client = MyClient()
