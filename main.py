@@ -20,6 +20,20 @@ async def startupRecovery():
             print("Starting: "+file)
             await monitorTimer.monitorTimer(client, file, None)
 
+async def fileDump():
+    files = os.listdir("guildSettings")
+    for file in files:
+
+        f = open("guildSettings/" + file, "r")
+        data = f.readlines()
+        f.close()
+        lineData = []
+        for line in data:
+            if line.__contains__("\n"):
+                line = line[:-1]
+            lineData.append(line)
+        fileData = [file, lineData]
+        print(fileData)
 
 class MyClient(discord.Client):
 
@@ -65,7 +79,8 @@ class MyClient(discord.Client):
                 await message.reply("Server: " + fileOperations.getServer(message.guild) + "\nChannel: " +
                                     fileOperations.getChannel(message.guild) + "\nMonitor (1 is yes): " +
                                     fileOperations.getFlag(message.guild))
-            
+            elif message.content.__contains__("kirk-fileDump"):
+                await fileDump()
 
 
 client = MyClient()
