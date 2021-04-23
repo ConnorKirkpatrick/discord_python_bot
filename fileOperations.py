@@ -106,7 +106,7 @@ def setServer(Server,monitor, guild):
         f.close()
 
 
-def getFlag(guild,monitor):
+def getFlag(guild, monitor):
     guild = str(guild)
     values = ""
     try:
