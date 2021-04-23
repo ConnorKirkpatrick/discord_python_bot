@@ -48,11 +48,11 @@ class MyClient(discord.Client):
         else:
             if message.content.__contains__("kirk-help"):
                 await message.reply("Use Commands wit the prefix 'kirk-':\n"
-                                    "setChannel: set the channel the monitor will post in\n"
-                                    "setServer: give the full name of the server you wish to monitor\n"
-                                    "startMonitor: Start the monitor\n"
-                                    "stopMonitor: stop the monitor\n"
-                                    "status: displays the current set values for server, channel and flag\n"
+                                    "setChannel X: set the channel the monitor number X will post in\n"
+                                    "setServer: give the full name of the server you wish to monitor with monitor X\n"
+                                    "startMonitor X: Start monitor X\n"
+                                    "stopMonitor X: stop monitor X\n"
+                                    "status: displays the current status of your monitors\n"
                                     "help: Display this message")
             elif message.content.__contains__("kirk-setChannel"):
                 await message.reply("setting channel to: " + message.content[15:])
@@ -76,9 +76,13 @@ class MyClient(discord.Client):
                 await message.reply("stopping.....")
                 fileOperations.setFlag(0, message.guild)
             elif message.content.__contains__("kirk-status"):
-                await message.reply("Server: " + fileOperations.getServer(message.guild) + "\nChannel: " +
-                                    fileOperations.getChannel(message.guild) + "\nMonitor (1 is yes): " +
-                                    fileOperations.getFlag(message.guild))
+                #await message.reply("Server: " + fileOperations.getServer(message.guild) + "\nChannel: " +
+                #                    fileOperations.getChannel(message.guild) + "\nMonitor (1 is yes): " +
+                #                    fileOperations.getFlag(message.guild))
+                await message.reply(fileOperations.status(message.guild))
+                await message.reply(fileOperations.getFlag(message.guild,2))
+                await message.reply(fileOperations.getChannel(message.guild, 2))
+                await message.reply(fileOperations.getServer(message.guild, 2))
             elif message.content.__contains__("kirk-fileDump"):
                 await fileDump()
 

@@ -1,1 +1,1 @@
-channel:834519299803971604,ServerName:Cold War 1947 - 1991,monitorFlag:1
+channel:834519299803971604,ServerName:Cold War 1947 - 1991,monitorFlag:0

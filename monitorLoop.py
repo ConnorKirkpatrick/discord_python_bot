@@ -1,7 +1,6 @@
 import serverList
 import fileOperations
 import datetime
-import threading
 
 
 async def getDetails(client, guild, message):

@@ -7,7 +7,7 @@ def setupFile(guild):
     values.close()
 
 
-def getChannel(guild):
+def getChannel(guild, monitor):
     guild = str(guild)
     values = ""
     try:
@@ -21,7 +21,7 @@ def getChannel(guild):
         values = open("guildSettings/"+guild+".txt", "r")
         content = values.readlines()
         values.close()
-        channel = content[0].split(",")[0].split(":")[1]
+        channel = content[monitor-1].split(",")[0].split(":")[1]
         return channel
 
 
@@ -47,7 +47,7 @@ def setChannel(channel, guild):
         f.close()
 
 
-def getServer(guild):
+def getServer(guild, monitor):
     guild = str(guild)
     values = ""
     try:
@@ -61,7 +61,7 @@ def getServer(guild):
         values = open("guildSettings/"+guild+".txt", "r")
         content = values.readlines()
         values.close()
-        server = content[0].split(",")[1].split(":")[1]
+        server = content[monitor-1].split(",")[1].split(":")[1]
         return server
 
 
@@ -87,7 +87,7 @@ def setServer(Server, guild):
         f.close()
 
 
-def getFlag(guild):
+def getFlag(guild,monitor):
     guild = str(guild)
     values = ""
     try:
@@ -101,7 +101,7 @@ def getFlag(guild):
         values = open("guildSettings/"+guild+".txt", "r")
         content = values.readlines()
         values.close()
-        flag = content[0].split(",")[2].split(":")[1]
+        flag = content[monitor-1].split(",")[2].split(":")[1]
         return flag
 
 
@@ -125,20 +125,26 @@ def setFlag(flag, guild):
         f.write(new)
         f.close()
 
-def getGuild():
-    values = open("values.txt", "r")
-    content = values.readlines()
-    values.close()
-    guild = content[0].split(",")[3].split(":")[1]
-    return guild
-
-def setGuild(guild):
+def status(guild):
     guild = str(guild)
-    values = open("values.txt", "r")
-    content = values.readlines()
-    values.close()
-    content = content[0].split(",")
-    new = content[0] + ","+content[1]+",monitorFlag:" + content[2] + ",guild:" + guild
-    f = open("values.txt", "w")
-    f.write(new)
-    f.close()
+    try:
+        values = open("guildSettings/" + guild + ".txt", "r")
+    except Exception as e:
+        print(e)
+        setup = threading.Thread(target=setupFile, args=(guild,))
+        setup.start()
+        setup.join()
+    finally:
+        values = open("guildSettings/" + guild + ".txt", "r")
+        content = values.readlines()
+        values.close()
+        output = ""
+        monitorNo = 1
+        for monitor in content:
+            output = output + "Monitor " + str(monitorNo) + ":"
+            output = output + "\n\tServer Name: " + content[monitorNo-1].split(",")[1].split(":")[1]
+            output = output + "\n\tChannel: " + content[monitorNo-1].split(",")[0].split(":")[1]
+            output = output + "\n\tStatus: " + content[monitorNo-1].split(",")[2].split(":")[1]
+            output = output + "\n"
+            monitorNo += 1
+        return output
