@@ -3,7 +3,8 @@ import threading
 def setupFile(guild):
     guild = str(guild)
     values = open("guildSettings/"+guild+".txt", "w")
-    values.write("channel:,ServerName:,monitorFlag:0,guild:")
+    values.write("channel:,ServerName:,monitorFlag:0\nchannel:,ServerName:,monitorFlag:0\nchannel:,ServerName:,"
+                 "monitorFlag:0\nchannel:,ServerName:,monitorFlag:0\nchannel:,ServerName:,monitorFlag:0\n")
     values.close()
 
 
@@ -25,10 +26,10 @@ def getChannel(guild, monitor):
         return channel
 
 
-def setChannel(channel, guild):
+def setChannel(channel, line, guild):
     guild = str(guild)
+    line = int(line)
     channel = channel.strip()
-    values = ""
     try:
         values = open("guildSettings/"+guild+".txt", "r")
     except Exception as e:
@@ -37,13 +38,23 @@ def setChannel(channel, guild):
         setup.start()
         setup.join()
     finally:
+        print("IN HERE")
         values = open("guildSettings/"+guild+".txt", "r")
         content = values.readlines()
         values.close()
-        content = content[0].split(",")
-        new = "channel:" + channel + "," + content[1] + "," + content[2] + ","
-        f = open("guildSettings/"+guild+".txt", "w")
-        f.write(new)
+        newData = ""
+        lineCount = 1
+        for lines in content:
+            if lineCount == line:
+                lineChange = content[line - 1].split(",")
+                newLine = "channel:"+channel+","+lineChange[1]+","+lineChange[2]
+                newData=newData+newLine
+                lineCount += 1
+            else:
+                newData = newData + lines
+                lineCount += 1
+        f = open("guildSettings/" + guild + ".txt", "w")
+        f.write(newData)
         f.close()
 
 

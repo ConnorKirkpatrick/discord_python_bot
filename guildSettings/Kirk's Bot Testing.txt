@@ -1,2 +1,0 @@
-channel:testChan,ServerName:Cold something,monitorFlag:0
-channel:another1,ServerName:Cold something else,monitorFlag:1

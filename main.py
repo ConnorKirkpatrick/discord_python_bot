@@ -6,19 +6,21 @@ import discord
 import fileOperations
 import monitorTimer
 
+
 ##duplicating the .txt on the end of the files
 
 async def startupRecovery():
     files = os.listdir("guildSettings")
     for file in files:
-        f = open("guildSettings/"+file, "r")
+        f = open("guildSettings/" + file, "r")
         data = f.readlines()
         f.close()
         file = file[:-4]
         flag = data[0].split(",")[2].split(":")[1]
         if flag == '1':
-            print("Starting: "+file)
+            print("Starting: " + file)
             await monitorTimer.monitorTimer(client, file, None)
+
 
 async def fileDump():
     files = os.listdir("guildSettings")
@@ -35,6 +37,7 @@ async def fileDump():
         fileData = [file, lineData]
         print(fileData)
 
+
 class MyClient(discord.Client):
 
     async def on_ready(self):
@@ -48,18 +51,38 @@ class MyClient(discord.Client):
         else:
             if message.content.__contains__("kirk-help"):
                 await message.reply("Use Commands wit the prefix 'kirk-':\n"
-                                    "setChannel X: set the channel the monitor number X will post in\n"
-                                    "setServer: give the full name of the server you wish to monitor with monitor X\n"
-                                    "startMonitor X: Start monitor X\n"
-                                    "stopMonitor X: stop monitor X\n"
+                                    "setChannel [channel]-[monitor]: set the channel to post the status into and the monitor responsible\n"
+                                    "setServer [server]-[monitor]: give the full name of the server of the server to monitor and the monitor responsible\n"
+                                    "startMonitor [monitor]: Start monitor\n"
+                                    "stopMonitor [monitor]: stop monitor\n"
                                     "status: displays the current status of your monitors\n"
                                     "help: Display this message")
+
             elif message.content.__contains__("kirk-setChannel"):
-                await message.reply("setting channel to: " + message.content[15:])
-                fileOperations.setChannel(message.content[15:], message.guild)
+                messageDetails = str(message.content[15:]).split("-")
+                try:
+                    if int(messageDetails[1]) > 5:
+                        await message.reply("Monitor out of range, max is 5")
+                    else:
+                        await message.reply("setting channel to: '" + messageDetails[0] + "' on monitor: " + messageDetails[1])
+                        fileOperations.setChannel(messageDetails[0], messageDetails[1], message.guild)
+                except Exception as e:
+                    print(e)
+                    await message.reply("Monitor is not a valid number")
+
             elif message.content.__contains__("kirk-setServer"):
-                await message.reply("setting server to: " + message.content[14:])
-                fileOperations.setServer(message.content[14:], message.guild)
+                messageDetails = str(message.content[14:]).split("-")
+                try:
+                    if int(messageDetails[1]) > 5:
+                        await message.reply("Monitor out of range, max is 5")
+                    else:
+                        await message.reply("setting server to: '" + messageDetails[0] + "' on monitor: "+messageDetails[1])
+                        fileOperations.setServer(messageDetails[0], messageDetails[1], message.guild)
+                except Exception as e:
+                    print(e)
+                    await message.reply("Monitor is not a valid number")
+
+# TODO: setup monitor choice for following 2 methods
             elif message.content.__contains__("kirk-startMonitor"):
                 await message.reply("Setting up.......")
                 if fileOperations.getFlag(message.guild) == '1':
@@ -72,17 +95,14 @@ class MyClient(discord.Client):
                         asyncio.run(await monitorTimer.monitorTimer(client, message.guild, message))
                     except Exception as e:
                         print(e)
+
             elif message.content.__contains__("kirk-stopMonitor"):
                 await message.reply("stopping.....")
                 fileOperations.setFlag(0, message.guild)
+
             elif message.content.__contains__("kirk-status"):
-                #await message.reply("Server: " + fileOperations.getServer(message.guild) + "\nChannel: " +
-                #                    fileOperations.getChannel(message.guild) + "\nMonitor (1 is yes): " +
-                #                    fileOperations.getFlag(message.guild))
                 await message.reply(fileOperations.status(message.guild))
-                await message.reply(fileOperations.getFlag(message.guild,2))
-                await message.reply(fileOperations.getChannel(message.guild, 2))
-                await message.reply(fileOperations.getServer(message.guild, 2))
+
             elif message.content.__contains__("kirk-fileDump"):
                 await fileDump()
 
