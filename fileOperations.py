@@ -124,9 +124,10 @@ def getFlag(guild,monitor):
         return flag
 
 
-def setFlag(flag, guild):
+def setFlag(flag, monitor, guild):
     guild = str(guild)
-    values = ""
+    monitor = int(monitor)
+    flag = str(flag)
     try:
         values = open("guildSettings/"+guild+".txt", "r")
     except Exception as e:
@@ -138,10 +139,19 @@ def setFlag(flag, guild):
         values = open("guildSettings/"+guild+".txt", "r")
         content = values.readlines()
         values.close()
-        content = content[0].split(",")
-        new = content[0] + ","+content[1]+",monitorFlag:" + str(flag) + ","
-        f = open("guildSettings/"+guild+".txt", "w")
-        f.write(new)
+        newData = ""
+        lineCount = 1
+        for lines in content:
+            if lineCount == monitor:
+                lineChange = content[monitor - 1].split(",")
+                newLine = lineChange[0]+","+lineChange[1]+",monitorFlag:"+flag+"\n"
+                newData=newData+newLine
+                lineCount += 1
+            else:
+                newData = newData + lines
+                lineCount += 1
+        f = open("guildSettings/" + guild + ".txt", "w")
+        f.write(newData)
         f.close()
 
 def status(guild):
