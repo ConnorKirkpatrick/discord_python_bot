@@ -26,9 +26,9 @@ def getChannel(guild, monitor):
         return channel
 
 
-def setChannel(channel, line, guild):
+def setChannel(channel, monitor, guild):
     guild = str(guild)
-    line = int(line)
+    monitor = int(monitor)
     channel = channel.strip()
     try:
         values = open("guildSettings/"+guild+".txt", "r")
@@ -38,15 +38,14 @@ def setChannel(channel, line, guild):
         setup.start()
         setup.join()
     finally:
-        print("IN HERE")
         values = open("guildSettings/"+guild+".txt", "r")
         content = values.readlines()
         values.close()
         newData = ""
         lineCount = 1
         for lines in content:
-            if lineCount == line:
-                lineChange = content[line - 1].split(",")
+            if lineCount == monitor:
+                lineChange = content[monitor - 1].split(",")
                 newLine = "channel:"+channel+","+lineChange[1]+","+lineChange[2]
                 newData=newData+newLine
                 lineCount += 1
@@ -76,10 +75,10 @@ def getServer(guild, monitor):
         return server
 
 
-def setServer(Server, guild):
+def setServer(Server,monitor, guild):
     guild = str(guild)
     Server = Server.strip()
-    values = ""
+    monitor = int(monitor)
     try:
         values = open("guildSettings/"+guild+".txt", "r")
     except Exception as e:
@@ -91,10 +90,19 @@ def setServer(Server, guild):
         values = open("guildSettings/"+guild+".txt", "r")
         content = values.readlines()
         values.close()
-        content = content[0].split(",")
-        new = content[0] + ",ServerName:" + Server + "," + content[2] + ","
-        f = open("guildSettings/"+guild+".txt", "w")
-        f.write(new)
+        newData = ""
+        lineCount = 1
+        for lines in content:
+            if lineCount == monitor:
+                lineChange = content[monitor - 1].split(",")
+                newLine = lineChange[0]+",server:"+Server+","+lineChange[2]
+                newData=newData+newLine
+                lineCount += 1
+            else:
+                newData = newData + lines
+                lineCount += 1
+        f = open("guildSettings/" + guild + ".txt", "w")
+        f.write(newData)
         f.close()
 
 
