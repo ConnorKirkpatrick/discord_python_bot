@@ -8,17 +8,20 @@ import monitorTimer
 
 
 async def startupRecovery():
-    # TODO: fix for the multiple monitor changes
     files = os.listdir("guildSettings")
     for file in files:
         f = open("guildSettings/" + file, "r")
         data = f.readlines()
         f.close()
-        file = file[:-4]
-        flag = data[0].split(",")[2].split(":")[1]
-        if flag == '1':
-            print("Starting: " + file)
-            await monitorTimer.monitorTimer(client, file, None)
+        tick = 1
+        print(file)
+        for monitors in data:
+            monitors = monitors.split(",")
+            flag = monitors[2].split(":")[1]
+            if flag == "1\n":
+                print("STARTING: "+file[:-4]+" MONITOR: "+str(tick))
+                asyncio.create_task(monitorTimer.monitorTimer(client, file[:-4], None, tick))
+            tick += 1
 
 
 async def fileDump():
@@ -101,7 +104,7 @@ class MyClient(discord.Client):
                     await asyncio.sleep(2.5)
                     fileOperations.setFlag(1, monitor, message.guild)
                     try:
-                        asyncio.run(await monitorTimer.monitorTimer(client, message.guild, message, monitor))
+                        asyncio.create_task(monitorTimer.monitorTimer(client, message.guild, message, monitor))
                     except Exception as e:
                         print(e)
                         message.reply("Monitor failed to start: " + e)
