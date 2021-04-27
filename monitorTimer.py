@@ -12,3 +12,5 @@ async def monitorTimer(client, guild, message, monitor):
             await asyncio.sleep(30)
             if status != 1:
                 break
+        else:
+            break

@@ -6,6 +6,7 @@ def setupFile(guild):
     values.write("channel:,ServerName:,monitorFlag:0\nchannel:,ServerName:,monitorFlag:0\nchannel:,ServerName:,"
                  "monitorFlag:0\nchannel:,ServerName:,monitorFlag:0\nchannel:,ServerName:,monitorFlag:0\n")
     values.close()
+    return
 
 
 def getChannel(guild, monitor):
@@ -55,6 +56,7 @@ def setChannel(channel, monitor, guild):
         f = open("guildSettings/" + guild + ".txt", "w")
         f.write(newData)
         f.close()
+        return
 
 
 def getServer(guild, monitor):
@@ -104,6 +106,7 @@ def setServer(Server,monitor, guild):
         f = open("guildSettings/" + guild + ".txt", "w")
         f.write(newData)
         f.close()
+        return
 
 
 def getFlag(guild, monitor):
@@ -153,6 +156,7 @@ def setFlag(flag, monitor, guild):
         f = open("guildSettings/" + guild + ".txt", "w")
         f.write(newData)
         f.close()
+        return
 
 def status(guild):
     guild = str(guild)
