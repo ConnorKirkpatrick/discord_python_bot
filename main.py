@@ -3,59 +3,20 @@ import os
 
 import discord
 
-import fileOperations
-import monitorTimer
+from functions import startupRecovery, monitorTimer, fileDump, fileOperations
 
-
-async def startupRecovery():
-    files = os.listdir("guildSettings")
-    for file in files:
-        f = open("guildSettings/" + file, "r")
-        data = f.readlines()
-        f.close()
-        tick = 1
-        for monitors in data:
-            monitors = monitors.split(",")
-            flag = monitors[2].split(":")[1]
-            if flag == "1\n":
-                print("STARTING: " + file[:-4] + " MONITOR: " + str(tick))
-                asyncio.create_task(monitorTimer.monitorTimer(client, file[:-4], None, tick))
-            tick += 1
-
-
-async def fileDump():
-    files = os.listdir("guildSettings")
-    for file in files:
-
-        f = open("guildSettings/" + file, "r")
-        data = f.readlines()
-        f.close()
-        lineData = []
-        for line in data:
-            if line.__contains__("\n"):
-                line = line[:-1]
-            lineData.append(line)
-        fileData = [file, lineData]
-        print(fileData)
-
-
-# Monitor loop stops after calling stopMonitor on an active monitor
-# Seems to kill the current process loop, thus killing the process pretty much
-# death occurs after 30 secs, so it must be the looped check that kills
-# actually it performs an inf loop, not exiting the operation but never ending
 
 class MyClient(discord.Client):
 
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
-        asyncio.create_task(startupRecovery())
+        asyncio.create_task(startupRecovery.startupRecovery(client))
         # await monitorLoop.getDetails(client)
 
     async def on_message(self, message):
         if message.author == client.user:
             return
         else:
-            print(message.content)
             if message.content.__contains__("kirk-help"):
                 await message.reply("Use Commands wit the prefix 'kirk-':\n"
                                     "setChannel [channel]->[monitor]: set the channel to post the status into and the "
@@ -113,7 +74,7 @@ class MyClient(discord.Client):
                         asyncio.create_task(monitorTimer.monitorTimer(client, message.guild, message, monitor))
                     except Exception as e:
                         print(e)
-                        message.reply("Monitor failed to start: " + e)
+                        message.reply("Monitor failed to start: ", e)
 
             elif message.content.__contains__("kirk-stopMonitor"):
                 try:
@@ -135,7 +96,7 @@ class MyClient(discord.Client):
                 await message.reply(fileOperations.status(message.guild))
 
             elif message.content.__contains__("kirk-fileDump"):
-                await fileDump()
+                await fileDump.fileDump()
 
 
 client = MyClient()
