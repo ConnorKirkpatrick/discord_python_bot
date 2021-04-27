@@ -1,4 +1,5 @@
-from functions import monitorLoop, fileOperations
+from functions import fileOperations
+from functions.monitors import monitorLoop
 import asyncio
 
 

@@ -1,7 +1,7 @@
 import asyncio
 import os
 
-from functions import monitorTimer
+from functions.monitors import monitorTimer
 
 
 async def startupRecovery(client):
