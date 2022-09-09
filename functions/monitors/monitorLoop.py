@@ -41,17 +41,16 @@ async def getDetails(client, guild, message, monitor):
             embed.add_field(name="Active players", value=int(server['PLAYERS'])-1, inline=False)
             embed.add_field(name="Last checked", value=str(datetime.datetime.now()).split(".")[0], inline=False)
 
-            message = "SERVER: " + server['NAME'] + "\nIP: " + server['IP_ADDRESS'] + "\nPORT: " + server[
-                'PORT'] + "\nMISSION: " + server['MISSION_NAME'] + "\nPLAYERS: " + server['PLAYERS'] + "\nTIME UP: " + \
-                      server['MISSION_TIME_FORMATTED'] + "\nLAST CHECKED: " + str(datetime.datetime.now()).split(".")[0]
+
             flag = 1
-            try:
-                await [message async for message in channel.history(limit=1)][0].delete()
-            except Exception as e:
-                print(e)
-            finally:
+            messages = [message async for message in channel.history(limit=1)]
+            if len(messages) == 0:
                 await channel.send(embed=embed)
                 break
+            else:
+                await messages[0].edit(embed=embed)
+                break
+
     if flag == 0:
         try:
             await channel.last_message.delete()
