@@ -6,19 +6,21 @@ import discord
 import fileOperations
 import monitorTimer
 
+
 ##duplicating the .txt on the end of the files
 
 async def startupRecovery():
     files = os.listdir("guildSettings")
     for file in files:
-        f = open("guildSettings/"+file, "r")
+        f = open("guildSettings/" + file, "r")
         data = f.readlines()
         f.close()
         file = file[:-4]
         flag = data[0].split(",")[2].split(":")[1]
         if flag == '1':
-            print("Starting: "+file)
+            print("Starting: " + file)
             await monitorTimer.monitorTimer(client, file, None)
+
 
 async def fileDump():
     files = os.listdir("guildSettings")
@@ -34,6 +36,7 @@ async def fileDump():
             lineData.append(line)
         fileData = [file, lineData]
         print(fileData)
+
 
 class MyClient(discord.Client):
 
@@ -83,5 +86,8 @@ class MyClient(discord.Client):
                 await fileDump()
 
 
-client = MyClient()
+intents = discord.Intents.default()
+intents.message_content = True
+
+client = MyClient(intents=intents)
 client.run(os.environ["BOT-TOKEN"])
