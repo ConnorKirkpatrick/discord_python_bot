@@ -1,12 +1,14 @@
 import serverList
 from functions import fileOperations
 import datetime
-
+import discord
 
 async def getDetails(client, guild, message, monitor):
+
     servers = serverList.getServerList()
     requestServer = str(fileOperations.getServer(guild, monitor))
     channel = fileOperations.getChannel(guild, monitor)
+
     if channel is None or requestServer is None:
         print("Bad config: bad names")
         try:
@@ -34,16 +36,21 @@ async def getDetails(client, guild, message, monitor):
     # name,ip_address,port,mission_name,mission_time,players,players_max,description,mission_time_formatted
     for server in servers['SERVERS']:
         if server['NAME'] == requestServer:
+            embed = discord.Embed(title="Staus for: "+server['NAME'], color=0x336EFF)
+            embed.add_field(name="Mission Name", value=server['MISSION_NAME'], inline=False)
+            embed.add_field(name="Active players", value=int(server['PLAYERS'])-1, inline=False)
+            embed.add_field(name="Last checked", value=str(datetime.datetime.now()).split(".")[0], inline=False)
+
             message = "SERVER: " + server['NAME'] + "\nIP: " + server['IP_ADDRESS'] + "\nPORT: " + server[
                 'PORT'] + "\nMISSION: " + server['MISSION_NAME'] + "\nPLAYERS: " + server['PLAYERS'] + "\nTIME UP: " + \
                       server['MISSION_TIME_FORMATTED'] + "\nLAST CHECKED: " + str(datetime.datetime.now()).split(".")[0]
             flag = 1
             try:
-                await channel.last_message.delete()
+                await [message async for message in channel.history(limit=1)][0].delete()
             except Exception as e:
                 print(e)
             finally:
-                await channel.send(message)
+                await channel.send(embed=embed)
                 break
     if flag == 0:
         try:
