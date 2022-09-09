@@ -2,8 +2,7 @@ import serverList
 import fileOperations
 import datetime
 import threading
-
-
+import discord
 async def getDetails(client, guild, message):
     servers = serverList.getServerList()
     requestServer = str(fileOperations.getServer(guild))
@@ -40,12 +39,17 @@ async def getDetails(client, guild, message):
                       server['MISSION_TIME_FORMATTED'] + "\nLAST CHECKED: " + str(datetime.datetime.now()).split(".")[0]
             # print(message)
             flag = 1
+
+            embedTest = discord.Embed(title="Test Title",description="TestDesc",color=0x336EFF)
+            embedTest.add_field(name="Field1", value="hi", inline=False)
+            embedTest.add_field(name="Field2", value="hi2", inline=False)
             try:
                 await channel.last_message.delete()
             except Exception as e:
                 print(e)
             finally:
                 await channel.send(message)
+                await channel.send(embed=embedTest)
                 break
     if flag == 0:
         try:
