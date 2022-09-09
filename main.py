@@ -55,8 +55,3 @@ intents.message_content = True
 
 client = MyClient(intents=intents)
 client.run(os.environ["BOT-TOKEN"])
-
-def startupRecovery():
-    print("TESTING")
-    # check all files inside of guildSettings
-    # if file flag is true, start a monitor for it
