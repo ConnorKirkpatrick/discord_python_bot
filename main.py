@@ -23,9 +23,9 @@ class MyClient(discord.Client):
             if message.content.__contains__("kirk-help"):
                 await message.reply("Use Commands wit the prefix 'kirk-':\n"
                                     "setChannel [channel]->[monitor]: set the channel to post the status into and the "
-                                    "monitor responsible\n "
+                                    "monitor responsible\n"
                                     "setServer [server]->[monitor]: give the full name of the server of the server to "
-                                    "monitor and the monitor responsible\n "
+                                    "monitor and the monitor responsible\n"
                                     "startMonitor [monitor]: Start monitor\n"
                                     "stopMonitor [monitor]: stop monitor\n"
                                     "status: displays the current status of your monitors\n"
