@@ -3,15 +3,17 @@ import os
 
 import discord
 
-import fileOperations
-import monitorTimer
+from functions import fileOperations
+from functions.monitors import monitorTimer
+from functions.discordCalls import discordCalls
+from functions.miscDiscordOperations import startupRecovery
 
 
 class MyClient(discord.Client):
 
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
-
+        asyncio.create_task(startupRecovery.startupRecovery(client))
         # await monitorLoop.getDetails(client)
 
     async def on_message(self, message):
@@ -19,40 +21,39 @@ class MyClient(discord.Client):
             return
         else:
             if message.content.__contains__("kirk-help"):
-                await message.reply("Use Commands wit hthe prefix 'kirk-':\n"
-                                    "setChannel: set the channel the monitor will post in\n"
-                                    "setServer: give the full name of the server you wish to monitor\n"
-                                    "startMonitor: Start the monitor\n"
-                                    "stopMonitor: stop the monitor\n"
-                                    "status: displays the current set values for server, channel and flag\n"
-                                    "help:Display this message")
+                await message.reply("Use Commands wit the prefix 'kirk-':\n"
+                                    "setChannel [channel]->[monitor]: set the channel to post the status into and the "
+                                    "monitor responsible\n "
+                                    "setServer [server]->[monitor]: give the full name of the server of the server to "
+                                    "monitor and the monitor responsible\n "
+                                    "startMonitor [monitor]: Start monitor\n"
+                                    "stopMonitor [monitor]: stop monitor\n"
+                                    "status: displays the current status of your monitors\n"
+                                    "help: Display this message")
+
             elif message.content.__contains__("kirk-setChannel"):
-                await message.reply("setting chan")
-                fileOperations.setChannel(message.content[15:], message.guild)
+                await discordCalls.setChannel(message)
+
             elif message.content.__contains__("kirk-setServer"):
-                await message.reply("setting ser")
-                fileOperations.setServer(message.content[14:], message.guild)
+                await discordCalls.setServer(message)
+
             elif message.content.__contains__("kirk-startMonitor"):
-                await message.reply("Setting up.......")
-                # add a check to see if the monitor is running first
-                fileOperations.setFlag(1, message.guild)
-                await asyncio.sleep(2.5)
-                asyncio.run
-                asyncio.run(monitorTimer.monitorTimer(client, message.guild, message))
+                await discordCalls.startMonitor(message, client)
 
-                #timer = threading.Timer(10, await monitorTimer.monitorTimer(client, message.guild, message))
-                #timer.start()
-                # await monitorTimer.monitorTimer(client, message.guild, message)
             elif message.content.__contains__("kirk-stopMonitor"):
-                await message.reply("stopping.....")
-                fileOperations.setFlag(0, message.guild)
+                await discordCalls.stopMonitor(message)
+
             elif message.content.__contains__("kirk-status"):
-                await message.reply("Server: " + fileOperations.getServer(message.guild) + "\nChannel: " +
-                                    fileOperations.getChannel(message.guild) + "\nFlag: " +
-                                    fileOperations.getFlag(message.guild))
+                await message.reply(fileOperations.status(message.guild))
+
+            elif message.content.__contains__("kirk-fileDump"):
+                await fileDump.fileDump()
 
 
-client = MyClient()
+intents = discord.Intents.default()
+intents.message_content = True
+
+client = MyClient(intents=intents)
 client.run(os.environ["BOT-TOKEN"])
 
 def startupRecovery():

@@ -18,4 +18,3 @@ async def startupRecovery(client):
                 print("STARTING: " + file[:-4] + " MONITOR: " + str(tick))
                 asyncio.create_task(monitorTimer.monitorTimer(client, file[:-4], None, tick))
             tick += 1
-

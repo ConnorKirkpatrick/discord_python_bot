@@ -1,12 +1,12 @@
 import serverList
-import fileOperations
+from functions import fileOperations
 import datetime
-import threading
-import discord
-async def getDetails(client, guild, message):
+
+
+async def getDetails(client, guild, message, monitor):
     servers = serverList.getServerList()
-    requestServer = str(fileOperations.getServer(guild))
-    channel = fileOperations.getChannel(guild)
+    requestServer = str(fileOperations.getServer(guild, monitor))
+    channel = fileOperations.getChannel(guild, monitor)
     if channel is None or requestServer is None:
         print("Bad config: bad names")
         try:
@@ -14,7 +14,7 @@ async def getDetails(client, guild, message):
         except Exception as e:
             print(e)
         finally:
-            fileOperations.setFlag(0, guild)
+            fileOperations.setFlag(0, guild, monitor)
             return 0
     try:
         channel = int(channel)
@@ -26,7 +26,7 @@ async def getDetails(client, guild, message):
         except Exception as e:
             print(e)
         finally:
-            fileOperations.setFlag(0, guild)
+            fileOperations.setFlag(0, guild, monitor)
             return 0
     channel = client.get_channel(channel)
     flag = 0
@@ -37,19 +37,13 @@ async def getDetails(client, guild, message):
             message = "SERVER: " + server['NAME'] + "\nIP: " + server['IP_ADDRESS'] + "\nPORT: " + server[
                 'PORT'] + "\nMISSION: " + server['MISSION_NAME'] + "\nPLAYERS: " + server['PLAYERS'] + "\nTIME UP: " + \
                       server['MISSION_TIME_FORMATTED'] + "\nLAST CHECKED: " + str(datetime.datetime.now()).split(".")[0]
-            # print(message)
             flag = 1
-
-            embedTest = discord.Embed(title="Test Title",description="TestDesc",color=0x336EFF)
-            embedTest.add_field(name="Field1", value="hi", inline=False)
-            embedTest.add_field(name="Field2", value="hi2", inline=False)
             try:
                 await channel.last_message.delete()
             except Exception as e:
                 print(e)
             finally:
                 await channel.send(message)
-                await channel.send(embed=embedTest)
                 break
     if flag == 0:
         try:
@@ -60,5 +54,4 @@ async def getDetails(client, guild, message):
             await channel.send(
                 "Server unreachable:" + requestServer + "\nCheck the server name, else it is down.\nLAST CHECKED:" +
                 str(datetime.datetime.now()).split(".")[0])
-            # print("unreachable")
     return 1
