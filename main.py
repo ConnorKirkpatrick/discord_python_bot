@@ -7,19 +7,22 @@ from functions import fileOperations
 from functions.monitors import monitorTimer
 from functions.discordCalls import discordCalls
 from functions.miscDiscordOperations import startupRecovery
+from functions.monitors import fetchLoop
+
 
 # Post reduction: Aim to reduce number of net requests made
 # currently a new request is made for every single monitor
 # Aim is to make 1 request per cycle time and save the request for all requesters to use
 
-runningMonitors = 0
-
 
 class MyClient(discord.Client):
     async def on_ready(self):
+        self.runningMonitors = 1    #set to 1 so we can perform an inital request to populate any monitors that need started
+        self.servers = ""
         print('Logged on as {0}!'.format(self.user))
-        runningMonitors += await asyncio.create_task(startupRecovery.startupRecovery(client))
-        # await monitorLoop.getDetails(client)
+        asyncio.create_task(fetchLoop.fetchLoop(self))
+        self.runningMonitors += await asyncio.create_task(startupRecovery.startupRecovery(client))
+
 
     async def on_message(self, message):
         if message.author == client.user:
@@ -43,10 +46,10 @@ class MyClient(discord.Client):
                 await discordCalls.setServer(message)
 
             elif message.content.__contains__("kirk-startMonitor"):
-                runningMonitors += await discordCalls.startMonitor(message, client)
+                self.runningMonitors += await discordCalls.startMonitor(message, client)
 
             elif message.content.__contains__("kirk-stopMonitor"):
-                runningMonitors += await discordCalls.stopMonitor(message)
+                self.runningMonitors += await discordCalls.stopMonitor(message)
 
             elif message.content.__contains__("kirk-status"):
                 await message.reply(fileOperations.status(message.guild))
@@ -60,3 +63,4 @@ intents.message_content = True
 
 client = MyClient(intents=intents)
 client.run(os.environ["BOT-TOKEN"])
+
