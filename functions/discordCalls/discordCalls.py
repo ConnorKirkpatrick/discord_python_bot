@@ -50,9 +50,11 @@ async def startMonitor(message, client):
         fileOperations.setFlag(1, monitor, message.guild)
         try:
             asyncio.create_task(monitorTimer.monitorTimer(client, message.guild, message, monitor))
+            return 1
         except Exception as e:
             print(e)
             message.reply("Monitor failed to start: ", e)
+            return 0
 
 
 async def stopMonitor(message):
@@ -61,12 +63,13 @@ async def stopMonitor(message):
     except Exception as e:
         print(e)
         await message.reply("No valid monitor specified")
-        return
+        return 0
     if monitor > 5:
         await message.reply("Monitor out of range")
     elif str(fileOperations.getFlag(message.guild, monitor)) == '0\n':
         await message.reply("Monitor not running")
-        return
+        return 0
     else:
         await message.reply("stopping.....")
         fileOperations.setFlag(0, monitor, message.guild)
+        return -1

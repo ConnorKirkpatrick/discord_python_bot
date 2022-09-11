@@ -5,6 +5,7 @@ from functions.monitors import monitorTimer
 
 
 async def startupRecovery(client):
+    runningMonitors = 0
     files = os.listdir("./guildSettings")
     for file in files:
         f = open("guildSettings/" + file, "r")
@@ -17,4 +18,6 @@ async def startupRecovery(client):
             if flag == "1\n":
                 print("STARTING: " + file[:-4] + " MONITOR: " + str(tick))
                 asyncio.create_task(monitorTimer.monitorTimer(client, file[:-4], None, tick))
+                runningMonitors += 1
             tick += 1
+    return runningMonitors
