@@ -3,9 +3,9 @@ from functions import fileOperations
 import datetime
 import discord
 
-async def getDetails(client, guild, message, monitor):
+async def getDetails(client, guild, message, monitor, object):
 
-    servers = serverList.getServerList()
+    servers = object.servers
     requestServer = str(fileOperations.getServer(guild, monitor))
     channel = fileOperations.getChannel(guild, monitor)
 

@@ -32,7 +32,7 @@ async def setServer(message):
         await message.reply("Monitor is not a valid number")
 
 
-async def startMonitor(message, client):
+async def startMonitor(message, client, object):
     try:
         monitor = int(str(message.content[17:]).strip())
     except Exception as e:
@@ -49,7 +49,7 @@ async def startMonitor(message, client):
         await asyncio.sleep(2.5)
         fileOperations.setFlag(1, monitor, message.guild)
         try:
-            asyncio.create_task(monitorTimer.monitorTimer(client, message.guild, message, monitor))
+            asyncio.create_task(monitorTimer.monitorTimer(client, message.guild, message, monitor, oject))
             return 1
         except Exception as e:
             print(e)
