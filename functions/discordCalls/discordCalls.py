@@ -29,7 +29,11 @@ async def setServer(message):
             fileOperations.setServer(messageDetails[0], messageDetails[1], message.guild)
     except Exception as e:
         print(e)
-        await message.reply("Monitor is not a valid number")
+        if(int(messageDetails[1]) < 1 or int(messageDetails[1]) > 5):
+            await message.reply("Monitor is not a valid number")
+        else:
+            fileOperations.setupFile(message.guild)
+
 
 
 async def startMonitor(message, client, object):
@@ -38,18 +42,18 @@ async def startMonitor(message, client, object):
     except Exception as e:
         print(e)
         await message.reply("No valid monitor specified")
-        return
+        return 0
     if monitor > 5:
         await message.reply("Monitor out of range")
     elif str(fileOperations.getFlag(message.guild, monitor)) == '1\n':
         await message.reply("Monitor already running")
-        return
+        return 0
     else:
         await message.reply("Starting up monitor: " + str(monitor))
         await asyncio.sleep(2.5)
         fileOperations.setFlag(1, monitor, message.guild)
         try:
-            asyncio.create_task(monitorTimer.monitorTimer(client, message.guild, message, monitor, oject))
+            asyncio.create_task(monitorTimer.monitorTimer(client, message.guild, message, monitor, object))
             return 1
         except Exception as e:
             print(e)

@@ -7,6 +7,7 @@ from functions import fileOperations
 from functions.monitors import monitorTimer
 from functions.discordCalls import discordCalls
 from functions.miscDiscordOperations import startupRecovery
+from functions.miscDiscordOperations import fileDump
 from functions.monitors import fetchLoop
 
 
@@ -44,7 +45,7 @@ class MyClient(discord.Client):
                 await discordCalls.setServer(message)
 
             elif message.content.__contains__("kirk-startMonitor"):
-                self.runningMonitors += await discordCalls.startMonitor(message, client, oject)
+                self.runningMonitors += await discordCalls.startMonitor(message, client, self)
 
             elif message.content.__contains__("kirk-stopMonitor"):
                 self.runningMonitors += await discordCalls.stopMonitor(message)
