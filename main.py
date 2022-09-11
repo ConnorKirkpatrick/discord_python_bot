@@ -10,9 +10,7 @@ from functions.miscDiscordOperations import startupRecovery
 from functions.monitors import fetchLoop
 
 
-# Post reduction: Aim to reduce number of net requests made
-# currently a new request is made for every single monitor
-# Aim is to make 1 request per cycle time and save the request for all requesters to use
+# MiscFunctionImprovements: aims to improve user interaction functions such as status messages and automated fileDumps
 
 
 class MyClient(discord.Client):
@@ -52,7 +50,7 @@ class MyClient(discord.Client):
                 self.runningMonitors += await discordCalls.stopMonitor(message)
 
             elif message.content.__contains__("kirk-status"):
-                await message.reply(fileOperations.status(message.guild))
+                await message.reply(fileOperations.status(client,message.guild))
 
             elif message.content.__contains__("kirk-fileDump"):
                 await fileDump.fileDump()
