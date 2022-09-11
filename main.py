@@ -21,7 +21,7 @@ class MyClient(discord.Client):
         self.servers = ""
         print('Logged on as {0}!'.format(self.user))
         asyncio.create_task(fetchLoop.fetchLoop(self))
-        self.runningMonitors += await asyncio.create_task(startupRecovery.startupRecovery(client))
+        self.runningMonitors += await asyncio.create_task(startupRecovery.startupRecovery(client, self))
 
 
     async def on_message(self, message):
@@ -46,7 +46,7 @@ class MyClient(discord.Client):
                 await discordCalls.setServer(message)
 
             elif message.content.__contains__("kirk-startMonitor"):
-                self.runningMonitors += await discordCalls.startMonitor(message, client)
+                self.runningMonitors += await discordCalls.startMonitor(message, client, oject)
 
             elif message.content.__contains__("kirk-stopMonitor"):
                 self.runningMonitors += await discordCalls.stopMonitor(message)
