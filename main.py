@@ -8,12 +8,17 @@ from functions.monitors import monitorTimer
 from functions.discordCalls import discordCalls
 from functions.miscDiscordOperations import startupRecovery
 
+# Post reduction: Aim to reduce number of net requests made
+# currently a new request is made for every single monitor
+# Aim is to make 1 request per cycle time and save the request for all requesters to use
+
+runningMonitors = 0
+
 
 class MyClient(discord.Client):
-
     async def on_ready(self):
         print('Logged on as {0}!'.format(self.user))
-        asyncio.create_task(startupRecovery.startupRecovery(client))
+        runningMonitors += await asyncio.create_task(startupRecovery.startupRecovery(client))
         # await monitorLoop.getDetails(client)
 
     async def on_message(self, message):
@@ -38,10 +43,10 @@ class MyClient(discord.Client):
                 await discordCalls.setServer(message)
 
             elif message.content.__contains__("kirk-startMonitor"):
-                await discordCalls.startMonitor(message, client)
+                runningMonitors += await discordCalls.startMonitor(message, client)
 
             elif message.content.__contains__("kirk-stopMonitor"):
-                await discordCalls.stopMonitor(message)
+                runningMonitors += await discordCalls.stopMonitor(message)
 
             elif message.content.__contains__("kirk-status"):
                 await message.reply(fileOperations.status(message.guild))
