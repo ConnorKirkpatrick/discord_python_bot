@@ -178,8 +178,10 @@ def status(client, guild):
         for monitor in content:
             output = output + "Monitor " + str(monitorNo) + ":"
             output = output + "\n\tServer Name: " + content[monitorNo - 1].split(",")[1].split(":")[1]
-            output = output + "\n\tChannel: " + str(
-                client.get_channel(int(content[monitorNo - 1].split(",")[0].split(":")[1])))
+            if content[monitorNo - 1].split(",")[0].split(":")[1] == "":
+                output = output + "\n\tChannel: "
+            else:
+                output = output + "\n\tChannel: " + str(client.get_channel(int(content[monitorNo - 1].split(",")[0].split(":")[1])))
             if content[monitorNo - 1].split(",")[2].split(":")[1]:
                 output = output + "\n\tStatus: Running"
             else:
