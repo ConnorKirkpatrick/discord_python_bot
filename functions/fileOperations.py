@@ -166,9 +166,7 @@ def status(client, guild):
         values = open("guildSettings/" + guild + ".txt", "r")
     except Exception as e:
         print(e)
-        setup = threading.Thread(target=setupFile, args=(guild,))
-        setup.start()
-        setup.join()
+        setupFile(guild)
     finally:
         values = open("guildSettings/" + guild + ".txt", "r")
         content = values.readlines()
