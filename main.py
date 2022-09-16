@@ -11,7 +11,9 @@ from functions.miscDiscordOperations import fileDump
 from functions.monitors import fetchLoop
 
 
-# MiscFunctionImprovements: aims to improve user interaction functions such as status messages and automated fileDumps
+# IntelligentEditing: We will try to allow all monitors to be present in one channel
+# make request for last 5 messages, check the embed names for a match to the current monitor server
+# if match is found, edit that message
 
 
 class MyClient(discord.Client):
