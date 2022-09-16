@@ -33,6 +33,7 @@ async def getDetails(client, guild, message, monitor, object):
     channel = client.get_channel(channel)
     flag = 0
     for server in servers['SERVERS']:
+        i += 1
         if server['NAME'] == requestServer:
             embed = discord.Embed(title="Staus for: " + server['NAME'], color=0x336EFF)
             embed.add_field(name="Mission Name", value=server['MISSION_NAME'], inline=False)
@@ -49,6 +50,7 @@ async def getDetails(client, guild, message, monitor, object):
             if not foundMsg:
                 await channel.send(embed=embed)
                 break
+            break
 
     if flag == 0:
         embed = discord.Embed(title="Staus for: " + server['NAME'], color=0x336EFF)
